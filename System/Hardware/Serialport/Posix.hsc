@@ -78,6 +78,29 @@ openSerial dev settings = do
   return =<< setSerialSettings serial_port settings
 
 
+-- |Open and configure a serial port returning a standard Handle that has been opened with supplied OpenFileFlags
+hOpenSerialWithFlags :: FilePath
+                     -> SerialPortSettings
+                     -> OpenFileFlags
+                     -> IO Handle
+hOpenSerialWithFlags dev settings flags = do
+  ser <- openSerialWithFlags dev settings flags
+  h <- mkDuplexHandle ser dev Nothing noNewlineTranslation
+  hSetBuffering h NoBuffering
+  return h
+
+
+-- |Open a serial port with supplied OpenFileFlags,  and configure
+openSerialWithFlags :: FilePath            -- ^ Serial port, such as @\/dev\/ttyS0@ or @\/dev\/ttyUSB0@
+                    -> SerialPortSettings
+                    -> OpenFileFlags
+                    -> IO SerialPort
+openSerialWithFlags dev settings flags = do
+  fd' <- openFd dev ReadWrite Nothing flags
+  let serial_port = SerialPort fd' defaultSerialSettings
+  return =<< setSerialSettings serial_port settings
+
+
 -- |Use specific encoding for an action and restore old encoding afterwards
 withEncoding :: TextEncoding -> IO a -> IO a
 #if MIN_VERSION_base(4,5,0)

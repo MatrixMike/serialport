@@ -40,6 +40,8 @@ module System.Hardware.Serialport (
   -- ** Device
   ,hOpenSerial
   ,openSerial
+  ,hOpenSerialWithFlags
+  ,openSerialWithFlags
   ,closeSerial
   ,withSerial
   -- ** Sending & receiving
