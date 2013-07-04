@@ -77,29 +77,6 @@ openSerial dev settings = do
   let serial_port = SerialPort fd' defaultSerialSettings
   return =<< setSerialSettings serial_port settings
 
--- |Exclusively open and configure a serial port returning a standard Handle
-hOpenSerialWithLock :: FilePath
-                    -> SerialPortSettings
-                    -> IO Handle
-hOpenSerialWithLock dev settings = do
-  ser <- openSerialWithLock dev settings
-  h <- mkDuplexHandle ser dev Nothing noNewlineTranslation
-  hSetBuffering h NoBuffering
-  return h
-
-
--- |Exclusively open and configure a serial port
-openSerialWithLock :: FilePath            -- ^ Serial port, such as @\/dev\/ttyS0@ or @\/dev\/ttyUSB0@
-                   -> SerialPortSettings
-                   -> IO SerialPort
-openSerialWithLock dev settings = do
-  fd' <- openFd dev ReadWrite Nothing defaultFileFlags { noctty = True }
-  setLock fd' ( ReadLock, AbsoluteSeek, 0, 0 )
-  setLock fd' ( WriteLock, AbsoluteSeek, 0, 0 )
-  let serial_port = SerialPort fd' defaultSerialSettings
-  return =<< setSerialSettings serial_port settings
-
-
 
 -- |Use specific encoding for an action and restore old encoding afterwards
 withEncoding :: TextEncoding -> IO a -> IO a
