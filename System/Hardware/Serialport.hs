@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -fwarn-missing-signatures #-}
 {-# LANGUAGE CPP #-}
 
 -- |This module provides the serial port interface.
@@ -21,36 +22,33 @@
 -- > hPutStr h "AT\r"
 -- > hGetLine h >>= print
 -- > hClose h
-
-
-module System.Hardware.Serialport (
+module System.Hardware.Serialport
   -- * Types
-   CommSpeed(..)
-  ,StopBits(..)
-  ,Parity(..)
-  ,FlowControl(..)
-  ,SerialPort
+  ( CommSpeed(..)
+  , StopBits(..)
+  , Parity(..)
+  , FlowControl(..)
+  , SerialPort
   -- * Configure port
   -- | You don't need the get or set functions, they are used by openSerial
-  ,SerialPortSettings(..)
-  ,defaultSerialSettings
-  ,setSerialSettings
-  ,getSerialSettings
+  , SerialPortSettings(..)
+  , defaultSerialSettings
+  , setSerialSettings
+  , getSerialSettings
   -- * Serial methods
   -- ** Device
-  ,hOpenSerial
-  ,openSerial
-  ,closeSerial
-  ,withSerial
+  , hOpenSerial
+  , openSerial
+  , closeSerial
+  , withSerial
   -- ** Sending & receiving
-  ,send
-  ,recv
-  ,flush
+  , send
+  , recv
+  , flush
   -- ** Line control
-  ,setDTR
-  ,setRTS
+  , setDTR
+  , setRTS
   ) where
-
 #if defined(mingw32_HOST_OS)
 import System.Hardware.Serialport.Windows
 #else
@@ -61,5 +59,5 @@ import System.Hardware.Serialport.Types
 import qualified Control.Exception as Ex
 
 -- |Safer device function, so you don't forget to close the device
-withSerial :: String -> SerialPortSettings -> ( SerialPort -> IO a ) -> IO a
+withSerial :: String -> SerialPortSettings -> (SerialPort -> IO a) -> IO a
 withSerial dev settings = Ex.bracket (openSerial dev settings) closeSerial

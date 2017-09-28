@@ -1,8 +1,9 @@
+{-# OPTIONS_GHC -fwarn-missing-signatures #-}
 {-# OPTIONS_HADDOCK hide #-}
+
 module System.Hardware.Serialport.Types where
 
 import Data.Word
-
 
 -- | Supported baudrates
 data CommSpeed
@@ -19,20 +20,27 @@ data CommSpeed
   | CS115200
   deriving (Show)
 
+data StopBits
+  = One
+  | Two
 
-data StopBits = One | Two
-data Parity = Even | Odd | NoParity
-data FlowControl = Software | NoFlowControl
+data Parity
+  = Even
+  | Odd
+  | NoParity
 
-data SerialPortSettings = SerialPortSettings {
-                      commSpeed    :: CommSpeed,   -- ^ baudrate
-                      bitsPerWord  :: Word8,       -- ^ Number of bits in a word
-                      stopb        :: StopBits,    -- ^ Number of stop bits
-                      parity       :: Parity,      -- ^ Type of parity
-                      flowControl  :: FlowControl, -- ^ Type of flowcontrol
-                      timeout      :: Int          -- ^ Timeout when receiving a char in tenth of seconds
-                  }
+data FlowControl
+  = Software
+  | NoFlowControl
 
+data SerialPortSettings = SerialPortSettings
+  { commSpeed :: CommSpeed -- ^ baudrate
+  , bitsPerWord :: Word8 -- ^ Number of bits in a word
+  , stopb :: StopBits -- ^ Number of stop bits
+  , parity :: Parity -- ^ Type of parity
+  , flowControl :: FlowControl -- ^ Type of flowcontrol
+  , timeout :: Int -- ^ Timeout when receiving a char in tenth of seconds
+  }
 
 -- | Most commonly used configuration
 --
@@ -49,6 +57,4 @@ data SerialPortSettings = SerialPortSettings {
 --  - 0.1 second receive timeout
 --
 defaultSerialSettings :: SerialPortSettings
-defaultSerialSettings =
-  SerialPortSettings CS9600 8 One NoParity NoFlowControl 1
-
+defaultSerialSettings = SerialPortSettings CS9600 8 One NoParity NoFlowControl 1
