@@ -22,4 +22,6 @@ Prepare haskell test program
 Running the tests
 -----------------
 * Run the tests: cabal test --test-options="/dev/ttyACM0 /dev/ttyUSB0"
+* try 'dmesg | grep tty' to see the designation of the tty on the computer
+
 
