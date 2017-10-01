@@ -1,0 +1,2 @@
+dmesg | grep tty
+
