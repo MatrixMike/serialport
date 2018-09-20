@@ -23,7 +23,6 @@ configureComm h cs = do
   assertEqual "configure serial port" control_char . B.unpack =<< recv h 100
 
 
-
 sendRange :: SerialPort -> IO ()
 sendRange s =
   mapM_ sendAndRecv ['\x00'..'\xff']
@@ -34,13 +33,11 @@ sendRange s =
       assertEqual "byte mismatch" [c] . B.unpack =<< recv s 1
 
 
-
 testSerialport :: CommSpeed -> String -> SerialPort -> Test
 testSerialport cs test_port control = TestCase $ do
   configureComm control cs
   withSerial test_port defaultSerialSettings { commSpeed = cs } sendRange
   assertEqual "test ok" "ok\r\n" . B.unpack =<< recv control 100
-
 
 
 sendRangeH :: Handle -> IO ()
@@ -51,7 +48,6 @@ sendRangeH h =
     sendAndRecv c = do
       hPutChar h c
       assertEqual "byte mismatch" c =<< hGetChar h
-
 
 
 testHandle :: CommSpeed -> String -> SerialPort -> Test
@@ -71,7 +67,7 @@ testDelay test_port control = TestCase $ do
   assertEqual "configure serial port" [control_char] . B.unpack =<< recv control 100
 
   send s $ B.pack "a"
-  assertEqual "immediatly" "aA" . B.unpack =<< recv s 10
+  assertEqual "immediately" "aA" . B.unpack =<< recv s 10
 
   send s $ B.pack "b"
   assertEqual "delay 50 ms" "bB" . B.unpack =<< recv s 10
